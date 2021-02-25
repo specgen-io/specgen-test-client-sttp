@@ -1,0 +1,94 @@
+version: 2.1
+
+orbs:
+  artifactory: moda/artifactory@0.2.0
+
+parameters:
+  specgen-version:
+    type: string
+    default: 1.10.18
+
+jobs:
+  client-sttp:
+    environment:
+      SPECGEN_VERSION: << pipeline.parameters.specgen-version >>
+    working_directory: ~/specgen-tests
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - cache-{{ checksum "build.sbt" }}
+      - artifactory/setup-sbt:
+          jfrog-server-url: specgen.jfrog.io
+          repo-name: sbt
+      - start-service:
+          port: 8081
+      - run:
+          name: Build and test Scala client
+          command: |
+            export SERVICE_URL=http://localhost:8081
+            mkdir -p /tmp/test-results
+            sbt -Djunitxml=./test-results test < /dev/null
+      - store_test_results:
+          path: ./test-results
+      - save_cache:
+          key: cache-{{ checksum "build.sbt" }}
+          paths:
+            - ~/.sbt
+            - ~/.ivy2
+          
+commands:
+  start-service:
+    parameters:
+      port:
+        type: integer
+    steps:
+      - run:
+          name: Install service-go
+          command: |
+            curl -L https://github.com/specgen-io/specgen-test-service-go/releases/download/<< pipeline.parameters.specgen-version >>/service-go_linux_amd64.zip > service-go.zip
+            unzip -o service-go.zip
+            ls -la
+      - run:
+          name: Start service-go
+          command: ./service-go --port << parameters.port >>
+          background: true
+      - wait-url:
+          url: http://localhost:<< parameters.port >>/
+
+  wait-url:
+    parameters:
+      url:
+        type: string
+      sleep:
+        type: integer
+        default: 5
+      attempts:
+        type: integer
+        default: 12
+    steps:
+      - run:
+          name: Wait until url is available
+          command: |
+            attempt_counter=0
+            max_attempts=<< parameters.attempts >>
+
+            until $(curl --output /dev/null --silent --head --fail << parameters.url >>); do
+              if [ ${attempt_counter} -eq ${max_attempts} ];then
+                echo "Max attempts reached"
+                exit 1
+              fi
+
+              printf '.'
+              attempt_counter=$(($attempt_counter+1))
+              sleep << parameters.sleep >>
+            done
+
+
+workflows:
+  client-sttp:
+    jobs:
+      - client-sttp:
+          context: specgen
