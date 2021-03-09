@@ -111,20 +111,17 @@ class CheckClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing
   import ICheckClient._
   import ExecutionContext.Implicits.global
   private val logger: Logger = LoggerFactory.getLogger(this.getClass)
-  def checkQuery(pString: String, pStringOpt: Option[String], pStringArray: List[String], pDate: java.time.LocalDate, pDateArray: List[java.time.LocalDate], pTime: java.time.LocalTime, pDatetime: java.time.LocalDateTime, pByte: Byte, pInt: Int, pLong: Long, pDecimal: BigDecimal, pChar: Char, pEnum: Choice, pStringDefaulted: String = "the default value"): Future[CheckQueryResponse] = {
+  def checkQuery(pString: String, pStringOpt: Option[String], pStringArray: List[String], pDate: java.time.LocalDate, pDateArray: List[java.time.LocalDate], pDatetime: java.time.LocalDateTime, pInt: Int, pLong: Long, pDecimal: BigDecimal, pEnum: Choice, pStringDefaulted: String = "the default value"): Future[CheckQueryResponse] = {
     val query = new StringParamsWriter()
     query.write("p_string", pString)
     query.write("p_string_opt", pStringOpt)
     query.write("p_string_array", pStringArray)
     query.write("p_date", pDate)
     query.write("p_date_array", pDateArray)
-    query.write("p_time", pTime)
     query.write("p_datetime", pDatetime)
-    query.write("p_byte", pByte)
     query.write("p_int", pInt)
     query.write("p_long", pLong)
     query.write("p_decimal", pDecimal)
-    query.write("p_char", pChar)
     query.write("p_enum", pEnum)
     query.write("p_string_defaulted", pStringDefaulted)
     val url = Uri.parse(baseUrl+s"/check/query").get.params(query.params:_*)

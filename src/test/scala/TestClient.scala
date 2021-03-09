@@ -56,13 +56,10 @@ class CheckClientSpec extends FlatSpec {
       List("string 1", "string 2"),
       java.time.LocalDate.parse("2021-01-01"),
       List(java.time.LocalDate.parse("2021-01-02")),
-      java.time.LocalTime.parse("23:54"),
       java.time.LocalDateTime.parse("2021-01-02T23:54"),
-      123.toByte,
       123,
       123.toLong,
       BigDecimal("123"),
-      'c',
       pEnum=Choice.SecondChoice,
     )
     val actual = Await.ready(responseFuture, Duration.Inf).value.get.get

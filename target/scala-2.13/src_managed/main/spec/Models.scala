@@ -36,8 +36,6 @@ case class EnumFields(
 )
 
 case class NumericFields(
-  byteField: Byte,
-  shortField: Short,
   intField: Int,
   longField: Long,
   floatField: Float,
@@ -47,12 +45,10 @@ case class NumericFields(
 
 case class NonNumericFields(
   booleanField: Boolean,
-  charField: Char,
   stringField: String,
   uuidField: java.util.UUID,
   dateField: java.time.LocalDate,
-  datetimeField: java.time.LocalDateTime,
-  timeField: java.time.LocalTime
+  datetimeField: java.time.LocalDateTime
 )
 
 case class ArrayFields(

@@ -40,13 +40,10 @@ operations:
         p_string_array: string[]
         p_date: date
         p_date_array: date[]
-        p_time: time
         p_datetime: datetime
-        p_byte: byte
         p_int: int
         p_long: long
         p_decimal: decimal
-        p_char: char
         p_enum: Choice
         p_string_defaulted: string = the default value
       response:
@@ -56,14 +53,14 @@ models:
   Message:
     int_field: int
     string_field: string
-  
+
   Parent:
     field: string
     nested: Nested
 
   Nested:
     field: string
-  
+
   Choice:
     enum:
       first_choice: FIRST_CHOICE
@@ -74,8 +71,6 @@ models:
     enum_field: Choice
 
   NumericFields:
-    byte_field: byte
-    short_field: short
     int_field: int
     long_field: long
     float_field: float
@@ -84,12 +79,10 @@ models:
 
   NonNumericFields:
     boolean_field: boolean
-    char_field: char
     string_field: string
     uuid_field: uuid
     date_field: date
     datetime_field: datetime
-    time_field: time
 
   ArrayFields:
     int_array_field: int[]

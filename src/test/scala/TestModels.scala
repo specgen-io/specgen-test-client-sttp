@@ -19,29 +19,25 @@ class ModelsSpec extends FlatSpec {
 
   "numeric fields" should "be serializable" in {
     val data = NumericFields(
-      byteField = 0,
-      shortField = 0,
       intField = 0,
       longField = 0,
       floatField = 1.23f,
       doubleField = 1.23,
       decimalField = BigDecimal("1.23"),
     )
-    val jsonStr = """{"byte_field":0,"short_field":0,"int_field":0,"long_field":0,"float_field":1.23,"double_field":1.23,"decimal_field":1.23}"""
+    val jsonStr = """{"int_field":0,"long_field":0,"float_field":1.23,"double_field":1.23,"decimal_field":1.23}"""
     check(data, jsonStr)
   }
 
   "non numeric fields" should "be serializable" in {
     val data = NonNumericFields(
       booleanField = true,
-      charField = 'x',
       stringField = "the string",
       uuidField = UUID.fromString("123e4567-e89b-12d3-a456-426655440000"),
       dateField = LocalDate.parse("2019-11-30", DateTimeFormatter.ISO_LOCAL_DATE),
       datetimeField = LocalDateTime.parse("2019-11-30T17:45:55", DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-      timeField = LocalTime.parse("17:45:55", DateTimeFormatter.ISO_LOCAL_TIME),
     )
-    val jsonStr = """{"boolean_field":true,"char_field":"x","string_field":"the string","uuid_field":"123e4567-e89b-12d3-a456-426655440000","date_field":"2019-11-30","datetime_field":"2019-11-30T17:45:55","time_field":"17:45:55"}"""
+    val jsonStr = """{"boolean_field":true,"string_field":"the string","uuid_field":"123e4567-e89b-12d3-a456-426655440000","date_field":"2019-11-30","datetime_field":"2019-11-30T17:45:55"}"""
     check(data, jsonStr)
   }
 

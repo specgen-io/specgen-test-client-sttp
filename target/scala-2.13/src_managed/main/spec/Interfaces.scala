@@ -13,7 +13,7 @@ trait IEchoClient {
 
 trait ICheckClient {
   import ICheckClient._
-  def checkQuery(pString: String, pStringOpt: Option[String], pStringArray: List[String], pDate: java.time.LocalDate, pDateArray: List[java.time.LocalDate], pTime: java.time.LocalTime, pDatetime: java.time.LocalDateTime, pByte: Byte, pInt: Int, pLong: Long, pDecimal: BigDecimal, pChar: Char, pEnum: Choice, pStringDefaulted: String = "the default value"): Future[CheckQueryResponse]
+  def checkQuery(pString: String, pStringOpt: Option[String], pStringArray: List[String], pDate: java.time.LocalDate, pDateArray: List[java.time.LocalDate], pDatetime: java.time.LocalDateTime, pInt: Int, pLong: Long, pDecimal: BigDecimal, pEnum: Choice, pStringDefaulted: String = "the default value"): Future[CheckQueryResponse]
 }
 
 object IEchoClient {

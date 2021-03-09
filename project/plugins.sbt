@@ -1,1 +1,1 @@
-addSbtPlugin("io.specgen" % "sbt-specgen" % System.getenv("SPECGEN_VERSION"))
+addSbtPlugin("io.specgen" % "sbt-specgen" % "1.10.28")
