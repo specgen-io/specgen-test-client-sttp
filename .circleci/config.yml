@@ -9,7 +9,7 @@ parameters:
     default: 1.10.44
 
 jobs:
-  client-sttp:
+  build-test:
     environment:
       SPECGEN_VERSION: << pipeline.parameters.specgen-version >>
     working_directory: ~/specgen-tests
@@ -88,7 +88,7 @@ commands:
 
 
 workflows:
-  client-sttp:
+  build-test:
     jobs:
-      - client-sttp:
+      - build-test:
           context: specgen
