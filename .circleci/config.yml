@@ -6,7 +6,7 @@ orbs:
 parameters:
   specgen-version:
     type: string
-    default: 1.10.38
+    default: 1.10.44
 
 jobs:
   client-sttp:

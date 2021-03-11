@@ -54,65 +54,8 @@ models:
     int_field: int
     string_field: string
 
-  Parent:
-    field: string
-    nested: Nested
-
-  Nested:
-    field: string
-
   Choice:
     enum:
       first_choice: FIRST_CHOICE
       second_choice: SECOND_CHOICE
       third_choice: THIRD_CHOICE
-
-  EnumFields:
-    enum_field: Choice
-
-  NumericFields:
-    int_field: int
-    long_field: long
-    float_field: float
-    double_field: double
-    decimal_field: decimal
-
-  NonNumericFields:
-    boolean_field: boolean
-    string_field: string
-    uuid_field: uuid
-    date_field: date
-    datetime_field: datetime
-
-  ArrayFields:
-    int_array_field: int[]
-    string_array_field: string[]
-
-  MapFields:
-    int_map_field: int{}
-    string_map_field: string{}
-
-  OptionalFields:
-    int_option_field: int?
-    string_option_field: string?
-
-  RawJsonField:
-    json_field: json
-
-  OrderCreated:
-    id: uuid
-    sku: string
-    quantity: int
-
-  OrderChanged:
-    id: uuid
-    quantity: int
-
-  OrderCanceled:
-    id: uuid
-
-  OrderEvent:
-    oneOf:
-      created: OrderCreated
-      changed: OrderChanged
-      canceled: OrderCanceled
