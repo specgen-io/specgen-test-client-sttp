@@ -5,6 +5,7 @@ import org.scalatest.FlatSpec
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import com.softwaremill.sttp.akkahttp.AkkaHttpBackend
+import testservice.client.tests.Util
 
 class EchoClientSpec extends FlatSpec {
   implicit val httpBackend = AkkaHttpBackend()

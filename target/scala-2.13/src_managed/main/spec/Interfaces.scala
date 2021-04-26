@@ -1,6 +1,8 @@
 package testservice.client
 
 import scala.concurrent._
+import spec.Jsoner
+import spec.OperationResult
 import json._
 
 trait IEchoClient {
@@ -14,6 +16,7 @@ trait IEchoClient {
 trait ICheckClient {
   import ICheckClient._
   def checkQuery(pString: String, pStringOpt: Option[String], pStringArray: List[String], pDate: java.time.LocalDate, pDateArray: List[java.time.LocalDate], pDatetime: java.time.LocalDateTime, pInt: Int, pLong: Long, pDecimal: BigDecimal, pEnum: Choice, pStringDefaulted: String = "the default value"): Future[CheckQueryResponse]
+  def checkForbidden(): Future[CheckForbiddenResponse]
 }
 
 object IEchoClient {
@@ -53,6 +56,13 @@ object ICheckClient {
     case class Ok() extends CheckQueryResponse { def toResult = OperationResult(200, None)}
     def fromResult(result: OperationResult) = result.status match {
       case 200 => Ok()
+    }
+  }
+  sealed trait CheckForbiddenResponse { def toResult(): OperationResult }
+  object CheckForbiddenResponse {
+    case class Forbidden() extends CheckForbiddenResponse { def toResult = OperationResult(403, None)}
+    def fromResult(result: OperationResult) = result.status match {
+      case 403 => Forbidden()
     }
   }
 }

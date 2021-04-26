@@ -3,13 +3,10 @@ package testservice.client
 import scala.concurrent._
 import org.slf4j._
 import com.softwaremill.sttp._
-import ParamsTypesBindings._
+import spec.Jsoner
+import spec.OperationResult
+import spec.ParamsTypesBindings._
 import json._
-
-class TestServiceClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing]) {
-  val echo: IEchoClient = new EchoClient(baseUrl)
-  val check: ICheckClient = new CheckClient(baseUrl)
-}
 
 class EchoClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing]) extends IEchoClient {
   import IEchoClient._
@@ -137,6 +134,26 @@ class CheckClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing
           case Right(bodyStr) => logger.debug(s"Response status: ${response.code}, body: ${bodyStr}")
             val body = Option(bodyStr).collect { case x if x.nonEmpty => x }
             CheckQueryResponse.fromResult(OperationResult(response.code, body))
+          case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
+            logger.error(errorMessage)
+            throw new RuntimeException(errorMessage)
+        }
+    }
+  }
+  def checkForbidden(): Future[CheckForbiddenResponse] = {
+    val url = Uri.parse(baseUrl+s"/check/forbidden").get
+    logger.debug(s"Request to url: ${url}")
+    val response: Future[Response[String]] =
+      sttp
+        .get(url)
+        .parseResponseIf { status => status < 500 }
+        .send()
+    response.map {
+      response: Response[String] =>
+        response.body match {
+          case Right(bodyStr) => logger.debug(s"Response status: ${response.code}, body: ${bodyStr}")
+            val body = Option(bodyStr).collect { case x if x.nonEmpty => x }
+            CheckForbiddenResponse.fromResult(OperationResult(response.code, body))
           case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
             logger.error(errorMessage)
             throw new RuntimeException(errorMessage)

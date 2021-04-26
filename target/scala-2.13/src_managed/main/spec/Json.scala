@@ -1,4 +1,4 @@
-package testservice.client
+package spec
 
 object Jsoner {
 

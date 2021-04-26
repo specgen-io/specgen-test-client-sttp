@@ -1,4 +1,4 @@
-package testservice.client
+package testservice.client.tests
 
 object Util {
   def service_url(): String = {
