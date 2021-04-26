@@ -1,9 +1,6 @@
 package testservice.client
 
 import scala.concurrent._
-import spec.Jsoner
-import spec.OperationResult
-import json._
 
 trait IEchoClient {
   import IEchoClient._
@@ -20,49 +17,31 @@ trait ICheckClient {
 }
 
 object IEchoClient {
-  sealed trait EchoBodyResponse { def toResult(): OperationResult }
+  sealed trait EchoBodyResponse
   object EchoBodyResponse {
-    case class Ok(body: Message) extends EchoBodyResponse { def toResult = OperationResult(200, Some(Jsoner.write(body)))}
-    def fromResult(result: OperationResult) = result.status match {
-      case 200 => Ok(Jsoner.read[Message](result.body.get))
-    }
+    case class Ok(body: Message) extends EchoBodyResponse
   }
-  sealed trait EchoQueryResponse { def toResult(): OperationResult }
+  sealed trait EchoQueryResponse
   object EchoQueryResponse {
-    case class Ok(body: Message) extends EchoQueryResponse { def toResult = OperationResult(200, Some(Jsoner.write(body)))}
-    def fromResult(result: OperationResult) = result.status match {
-      case 200 => Ok(Jsoner.read[Message](result.body.get))
-    }
+    case class Ok(body: Message) extends EchoQueryResponse
   }
-  sealed trait EchoHeaderResponse { def toResult(): OperationResult }
+  sealed trait EchoHeaderResponse
   object EchoHeaderResponse {
-    case class Ok(body: Message) extends EchoHeaderResponse { def toResult = OperationResult(200, Some(Jsoner.write(body)))}
-    def fromResult(result: OperationResult) = result.status match {
-      case 200 => Ok(Jsoner.read[Message](result.body.get))
-    }
+    case class Ok(body: Message) extends EchoHeaderResponse
   }
-  sealed trait EchoUrlParamsResponse { def toResult(): OperationResult }
+  sealed trait EchoUrlParamsResponse
   object EchoUrlParamsResponse {
-    case class Ok(body: Message) extends EchoUrlParamsResponse { def toResult = OperationResult(200, Some(Jsoner.write(body)))}
-    def fromResult(result: OperationResult) = result.status match {
-      case 200 => Ok(Jsoner.read[Message](result.body.get))
-    }
+    case class Ok(body: Message) extends EchoUrlParamsResponse
   }
 }
 
 object ICheckClient {
-  sealed trait CheckQueryResponse { def toResult(): OperationResult }
+  sealed trait CheckQueryResponse
   object CheckQueryResponse {
-    case class Ok() extends CheckQueryResponse { def toResult = OperationResult(200, None)}
-    def fromResult(result: OperationResult) = result.status match {
-      case 200 => Ok()
-    }
+    case class Ok() extends CheckQueryResponse
   }
-  sealed trait CheckForbiddenResponse { def toResult(): OperationResult }
+  sealed trait CheckForbiddenResponse
   object CheckForbiddenResponse {
-    case class Forbidden() extends CheckForbiddenResponse { def toResult = OperationResult(403, None)}
-    def fromResult(result: OperationResult) = result.status match {
-      case 403 => Forbidden()
-    }
+    case class Forbidden() extends CheckForbiddenResponse
   }
 }

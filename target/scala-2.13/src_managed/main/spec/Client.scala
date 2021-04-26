@@ -4,7 +4,6 @@ import scala.concurrent._
 import org.slf4j._
 import com.softwaremill.sttp._
 import spec.Jsoner
-import spec.OperationResult
 import spec.ParamsTypesBindings._
 import json._
 
@@ -26,9 +25,10 @@ class EchoClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing]
     response.map {
       response: Response[String] =>
         response.body match {
-          case Right(bodyStr) => logger.debug(s"Response status: ${response.code}, body: ${bodyStr}")
-            val body = Option(bodyStr).collect { case x if x.nonEmpty => x }
-            EchoBodyResponse.fromResult(OperationResult(response.code, body))
+          case Right(body) => logger.debug(s"Response status: ${response.code}, body: ${body}")
+            response.code match {
+              case 200 => EchoBodyResponse.Ok(Jsoner.read[Message](body))
+            }
           case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
             logger.error(errorMessage)
             throw new RuntimeException(errorMessage)
@@ -49,9 +49,10 @@ class EchoClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing]
     response.map {
       response: Response[String] =>
         response.body match {
-          case Right(bodyStr) => logger.debug(s"Response status: ${response.code}, body: ${bodyStr}")
-            val body = Option(bodyStr).collect { case x if x.nonEmpty => x }
-            EchoQueryResponse.fromResult(OperationResult(response.code, body))
+          case Right(body) => logger.debug(s"Response status: ${response.code}, body: ${body}")
+            response.code match {
+              case 200 => EchoQueryResponse.Ok(Jsoner.read[Message](body))
+            }
           case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
             logger.error(errorMessage)
             throw new RuntimeException(errorMessage)
@@ -73,9 +74,10 @@ class EchoClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing]
     response.map {
       response: Response[String] =>
         response.body match {
-          case Right(bodyStr) => logger.debug(s"Response status: ${response.code}, body: ${bodyStr}")
-            val body = Option(bodyStr).collect { case x if x.nonEmpty => x }
-            EchoHeaderResponse.fromResult(OperationResult(response.code, body))
+          case Right(body) => logger.debug(s"Response status: ${response.code}, body: ${body}")
+            response.code match {
+              case 200 => EchoHeaderResponse.Ok(Jsoner.read[Message](body))
+            }
           case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
             logger.error(errorMessage)
             throw new RuntimeException(errorMessage)
@@ -93,9 +95,10 @@ class EchoClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing]
     response.map {
       response: Response[String] =>
         response.body match {
-          case Right(bodyStr) => logger.debug(s"Response status: ${response.code}, body: ${bodyStr}")
-            val body = Option(bodyStr).collect { case x if x.nonEmpty => x }
-            EchoUrlParamsResponse.fromResult(OperationResult(response.code, body))
+          case Right(body) => logger.debug(s"Response status: ${response.code}, body: ${body}")
+            response.code match {
+              case 200 => EchoUrlParamsResponse.Ok(Jsoner.read[Message](body))
+            }
           case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
             logger.error(errorMessage)
             throw new RuntimeException(errorMessage)
@@ -131,9 +134,10 @@ class CheckClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing
     response.map {
       response: Response[String] =>
         response.body match {
-          case Right(bodyStr) => logger.debug(s"Response status: ${response.code}, body: ${bodyStr}")
-            val body = Option(bodyStr).collect { case x if x.nonEmpty => x }
-            CheckQueryResponse.fromResult(OperationResult(response.code, body))
+          case Right(body) => logger.debug(s"Response status: ${response.code}, body: ${body}")
+            response.code match {
+              case 200 => CheckQueryResponse.Ok()
+            }
           case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
             logger.error(errorMessage)
             throw new RuntimeException(errorMessage)
@@ -151,9 +155,10 @@ class CheckClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing
     response.map {
       response: Response[String] =>
         response.body match {
-          case Right(bodyStr) => logger.debug(s"Response status: ${response.code}, body: ${bodyStr}")
-            val body = Option(bodyStr).collect { case x if x.nonEmpty => x }
-            CheckForbiddenResponse.fromResult(OperationResult(response.code, body))
+          case Right(body) => logger.debug(s"Response status: ${response.code}, body: ${body}")
+            response.code match {
+              case 403 => CheckForbiddenResponse.Forbidden()
+            }
           case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
             logger.error(errorMessage)
             throw new RuntimeException(errorMessage)
