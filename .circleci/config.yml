@@ -6,7 +6,7 @@ orbs:
 parameters:
   specgen-version:
     type: string
-    default: 2.0.117
+    default: 2.0.121
 
 jobs:
   build-test:
