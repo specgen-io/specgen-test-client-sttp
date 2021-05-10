@@ -1,15 +1,21 @@
-idl_version: 2
+spec: 2
 name: test-service
 version: 1
 
-http:
-  v2:
+v2:
+  http:
     echo:
       echo_body:
         endpoint: POST /echo/body
         body: Message
         response:
           ok: Message
+  models:
+    Message:
+      bool_field: boolean
+      string_field: string
+
+http:
   echo:
     echo_body:
       endpoint: POST /echo/body
@@ -62,11 +68,6 @@ http:
         forbidden: empty
 
 models:
-  v2:
-    Message:
-      bool_field: boolean
-      string_field: string
-
   Message:
     int_field: int
     string_field: string
