@@ -4,9 +4,9 @@ import enumeratum.values._
 import java.time._
 import java.time.format._
 import java.util.UUID
-import io.circe.generic.extras.{AutoDerivation, Configuration}
 import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.semiauto.{deriveUnwrappedDecoder, deriveUnwrappedEncoder}
+import io.circe.generic.extras.Configuration
+import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder, deriveUnwrappedDecoder, deriveUnwrappedEncoder}
 
 case class Message(
   intField: Int,
@@ -22,6 +22,8 @@ case object Choice extends StringEnum[Choice] with StringCirceEnum[Choice] {
   val values = findValues
 }
 
-object json extends AutoDerivation {
+object json {
   implicit val auto = Configuration.default.withSnakeCaseMemberNames.withSnakeCaseConstructorNames.withDefaults
+  implicit val encoderMessage: Encoder[Message] = deriveConfiguredEncoder
+  implicit val decoderMessage: Decoder[Message] = deriveConfiguredDecoder
 }
