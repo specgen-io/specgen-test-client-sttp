@@ -4,17 +4,16 @@ import enumeratum.values._
 import java.time._
 import java.time.format._
 import java.util.UUID
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder, deriveUnwrappedDecoder, deriveUnwrappedEncoder}
+import io.circe.Codec
+import io.circe.generic.extras.{Configuration, JsonKey}
+import io.circe.generic.extras.semiauto.{deriveConfiguredCodec, deriveUnwrappedCodec}
 
 case class Message(
-  boolField: Boolean,
-  stringField: String
+  @JsonKey("bool_field") boolField: Boolean,
+  @JsonKey("string_field") stringField: String
 )
 
-object json {
-  implicit val auto = Configuration.default.withSnakeCaseMemberNames.withSnakeCaseConstructorNames.withDefaults
-  implicit val encoderMessage: Encoder[Message] = deriveConfiguredEncoder
-  implicit val decoderMessage: Decoder[Message] = deriveConfiguredDecoder
+object Message {
+  implicit val config = Configuration.default
+  implicit val codec: Codec[Message] = deriveConfiguredCodec
 }

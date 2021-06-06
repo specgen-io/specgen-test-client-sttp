@@ -4,14 +4,19 @@ import enumeratum.values._
 import java.time._
 import java.time.format._
 import java.util.UUID
-import io.circe.{Decoder, Encoder}
-import io.circe.generic.extras.Configuration
-import io.circe.generic.extras.semiauto.{deriveConfiguredDecoder, deriveConfiguredEncoder, deriveUnwrappedDecoder, deriveUnwrappedEncoder}
+import io.circe.Codec
+import io.circe.generic.extras.{Configuration, JsonKey}
+import io.circe.generic.extras.semiauto.{deriveConfiguredCodec, deriveUnwrappedCodec}
 
 case class Message(
-  intField: Int,
-  stringField: String
+  @JsonKey("int_field") intField: Int,
+  @JsonKey("string_field") stringField: String
 )
+
+object Message {
+  implicit val config = Configuration.default
+  implicit val codec: Codec[Message] = deriveConfiguredCodec
+}
 
 sealed abstract class Choice(val value: String) extends StringEnumEntry
 
@@ -20,10 +25,4 @@ case object Choice extends StringEnum[Choice] with StringCirceEnum[Choice] {
   case object SecondChoice extends Choice("SECOND_CHOICE")
   case object ThirdChoice extends Choice("THIRD_CHOICE")
   val values = findValues
-}
-
-object json {
-  implicit val auto = Configuration.default.withSnakeCaseMemberNames.withSnakeCaseConstructorNames.withDefaults
-  implicit val encoderMessage: Encoder[Message] = deriveConfiguredEncoder
-  implicit val decoderMessage: Decoder[Message] = deriveConfiguredDecoder
 }

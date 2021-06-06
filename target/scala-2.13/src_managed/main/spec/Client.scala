@@ -5,7 +5,6 @@ import org.slf4j._
 import com.softwaremill.sttp._
 import spec.Jsoner
 import spec.ParamsTypesBindings._
-import json._
 
 class EchoClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing]) extends IEchoClient {
   import IEchoClient._
