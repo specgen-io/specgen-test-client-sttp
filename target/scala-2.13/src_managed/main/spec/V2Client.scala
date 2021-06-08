@@ -26,7 +26,7 @@ class EchoClient(baseUrl: String)(implicit backend: SttpBackend[Future, Nothing]
         response.body match {
           case Right(body) => logger.debug(s"Response status: ${response.code}, body: ${body}")
             response.code match {
-              case 200 => EchoBodyResponse.Ok(Jsoner.read[Message](body))
+              case 200 => EchoBodyResponse.Ok(Jsoner.readThrowing[Message](body))
             }
           case Left(errorData) => val errorMessage = s"Request failed, status code: ${response.code}, body: ${new String(errorData)}"
             logger.error(errorMessage)
